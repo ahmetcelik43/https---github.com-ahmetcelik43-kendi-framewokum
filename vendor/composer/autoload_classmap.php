@@ -6,11 +6,18 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Configs\\Database' => $baseDir . '/src/Configs/Database.php',
+    'App\\Controllers\\AdminController' => $baseDir . '/src/Controllers/AdminController.php',
+    'App\\Controllers\\Admin\\Dashboard' => $baseDir . '/src/Controllers/Admin/Dashboard.php',
     'App\\Controllers\\BaseController' => $baseDir . '/src/Controllers/BaseController.php',
     'App\\Controllers\\Home' => $baseDir . '/src/Controllers/Home.php',
+    'App\\Entity\\Models\\Permission' => $baseDir . '/src/Entity/Models/Permission.php',
     'App\\Entity\\Models\\User' => $baseDir . '/src/Entity/Models/User.php',
+    'App\\Entity\\Repository\\ParentRepository' => $baseDir . '/src/Entity/Repository/ParentRepository.php',
+    'App\\Entity\\Repository\\PermissionRepository' => $baseDir . '/src/Entity/Repository/PermissionRepository.php',
     'App\\Entity\\Repository\\UserRepository' => $baseDir . '/src/Entity/Repository/UserRepository.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+    'Router' => $baseDir . '/src/Configs/Router.php',
     '©' => $vendorDir . '/symfony/cache/Traits/ValueWrapper.php',
 );

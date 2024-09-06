@@ -7,7 +7,6 @@ ini_set('display_startup_errors', '1');
 error_reporting(E_ERROR);
 require_once "vendor/autoload.php";
 require_once './src/Configs/Router.php';
-
 defined('BASEPATH')  or define('BASEPATH',__DIR__);
 $router = new Router();
 $router->get('/', [(new Home()), 'index']);

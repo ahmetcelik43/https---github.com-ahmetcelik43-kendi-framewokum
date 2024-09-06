@@ -19,7 +19,7 @@ class Home extends AdminController
         $this->entityManager->getRepository(User::class)->save($user);*/
         //$this->con->close();
         $user = $this->entityManager->getRepository(User::class)->getById(1);
-        return $this->view("Admin/Dashboard",$user);
+        return view("Admin/Dashboard",$user);
 
         //$this->entityManager->getRepository(Permission::class)->delete(1);
     }
