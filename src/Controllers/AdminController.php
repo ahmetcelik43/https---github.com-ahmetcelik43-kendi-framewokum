@@ -8,6 +8,6 @@ class AdminController extends BaseController
     public function __construct()
     {
        //Helpers
-       include_once BASEPATH . "/src/Helpers/Admin/Dashboard.php";
+       include_once BASEPATH . "/src/Helpers/Admin/AdminHelper.php";
     }
 }
