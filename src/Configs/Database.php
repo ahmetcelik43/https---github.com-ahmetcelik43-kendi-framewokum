@@ -6,7 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
-trait Database
+class Database
 {
     public $entityManager;
     private $connection;
@@ -14,6 +14,7 @@ trait Database
     function __destruct()
     {
         $this->connection->close();
+        $this->entityManager->flush();
     }
 
     public function __construct()
@@ -43,6 +44,9 @@ trait Database
         // obtaining the entity manager
         $this->entityManager = new EntityManager($connection, $config);
         $this->connection = $connection;
+    }
+    public function get() {
+        return $this->entityManager;
     }
 
    

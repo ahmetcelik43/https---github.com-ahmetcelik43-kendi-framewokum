@@ -9,8 +9,10 @@ use App\Entity\Models\User;
 
 class Dashboard extends BaseController
 {
-    use Database;
-
+    private $entityManager;
+    public function __construct() {
+        $this->entityManager = (new Database())->get();
+    }
     public function save($id = null)
     {
         // YETKI KAYDET

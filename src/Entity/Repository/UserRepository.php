@@ -27,6 +27,16 @@ class UserRepository extends EntityRepository
         $stmt->bindValue("userid", $id);
         return $stmt->executeQuery()->fetchAssociative();
     }
+    public function getAll() {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT p.*, u.* 
+            FROM users u
+            JOIN permissions p ON p.permissionid = u.userpermission
+        ';
+        $stmt = $connection->prepare($sql);
+        return $stmt->executeQuery()->fetchAllAssociative();
+    }
 
     public function delete(int $userid): void
     {

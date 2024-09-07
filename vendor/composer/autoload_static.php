@@ -150,19 +150,8 @@ class ComposerStaticInitbee0201db5fa01f5f20e521a94084737
     );
 
     public static $classMap = array (
-        'App\\Configs\\Database' => __DIR__ . '/../..' . '/src/Configs/Database.php',
-        'App\\Controllers\\AdminController' => __DIR__ . '/../..' . '/src/Controllers/AdminController.php',
-        'App\\Controllers\\Admin\\Dashboard' => __DIR__ . '/../..' . '/src/Controllers/Admin/Dashboard.php',
-        'App\\Controllers\\BaseController' => __DIR__ . '/../..' . '/src/Controllers/BaseController.php',
-        'App\\Controllers\\Home' => __DIR__ . '/../..' . '/src/Controllers/Home.php',
-        'App\\Entity\\Models\\Permission' => __DIR__ . '/../..' . '/src/Entity/Models/Permission.php',
-        'App\\Entity\\Models\\User' => __DIR__ . '/../..' . '/src/Entity/Models/User.php',
-        'App\\Entity\\Repository\\ParentRepository' => __DIR__ . '/../..' . '/src/Entity/Repository/ParentRepository.php',
-        'App\\Entity\\Repository\\PermissionRepository' => __DIR__ . '/../..' . '/src/Entity/Repository/PermissionRepository.php',
-        'App\\Entity\\Repository\\UserRepository' => __DIR__ . '/../..' . '/src/Entity/Repository/UserRepository.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
-        'Router' => __DIR__ . '/../..' . '/src/Configs/Router.php',
         '©' => __DIR__ . '/..' . '/symfony/cache/Traits/ValueWrapper.php',
     );
 

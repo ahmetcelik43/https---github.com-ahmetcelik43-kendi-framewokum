@@ -27,7 +27,7 @@ class Router
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $requestUri=str_replace(["/doc2"],"",$requestUri);
+        $requestUri=str_replace(config('Settings','base_path'),"",$requestUri);
 
         foreach ($this->routes as $route) {
             if ($route['method'] === $requestMethod && preg_match($this->convertToRegex($route['path']), $requestUri, $matches)) {

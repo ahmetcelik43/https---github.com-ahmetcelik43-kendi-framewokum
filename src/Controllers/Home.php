@@ -3,25 +3,32 @@
 namespace App\Controllers;
 
 use App\Configs\Database;
-use App\Controllers\BaseController;
 use App\Entity\Models\Permission;
 use App\Entity\Models\User;
+use App\Business\Cache\FileSystemCache;
+use App\Business\Cache\ICache;
 
 class Home extends AdminController
 {
-    use Database;
-    
+    private $cacheManager;
+    private $entityManager;
+
+    public function __construct(ICache $cacheManager)
+    {
+        $this->entityManager = (new Database())->get();
+        $this->cacheManager = $cacheManager;
+    }
+
     public function index()
     {
-        /*$user = new User();
-        $user->setName('John Doe');
-        $user->setEmail('john.doe@example.com');
-        $this->entityManager->getRepository(User::class)->save($user);*/
-        //$this->con->close();
-        $user = $this->entityManager->getRepository(User::class)->getById(1);
-        return view("Admin/Dashboard",$user);
-
-        //$this->entityManager->getRepository(Permission::class)->delete(1);
+        $cacheKey = 'home-cache';
+        if (!$this->cacheManager->isExpire($cacheKey)) {
+            $user = $this->entityManager->getRepository(User::class)->getAll();
+            $cacheValue = viewData("Admin/Dashboard", $user);
+            $this->cacheManager->getAndSave($cacheKey, $cacheValue);
+            echo $cacheValue;
+            exit();
+        }
+        echo $this->cacheManager->get($cacheKey);
     }
-  
 }

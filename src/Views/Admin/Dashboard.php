@@ -7,6 +7,6 @@
 </head>
 <body>
     <h1>Dashboard</h1>
-    <?=  $data["username"]?>
+    <?=  $data[0]["username"]?>
 </body>
 </html>
