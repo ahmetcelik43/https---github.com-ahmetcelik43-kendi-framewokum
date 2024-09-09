@@ -2,13 +2,9 @@
 
 namespace App\Entity\Repository;
 
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
-
 trait ParentRepository
 {
-    public function insertBatch(array $userbatch = array(), $entityManager)
+    public function insertBatch(array $userbatch = array(), $tablename, $entityManager)
     {
         $columnKeys = array_keys(array_values($userbatch)[0]);
         $columnKeys = implode(',', $columnKeys);
@@ -21,7 +17,7 @@ trait ParentRepository
             $values[] =  "(" . implode(',', $temp) . ")";
         }
         $values = implode(',', $values);
-        $sql = "INSERT INTO permissions ($columnKeys) VALUES $values;";
+        $sql = "INSERT INTO $tablename ($columnKeys) VALUES $values;";
         $connection = $entityManager->getConnection();
         $stmt = $connection->prepare($sql);
         foreach ($userbatch as $key => $value) {
@@ -34,7 +30,7 @@ trait ParentRepository
         $connection->close();
     }
 
-    public function updateBatch(array $userbatch = array(), string $column, $entityManager)
+    public function updateBatch(array $userbatch = array(), string $column, $tablename, $entityManager)
     {
         $columnKeys = array_keys(array_values($userbatch)[0]);
         $values = [];
@@ -66,18 +62,15 @@ trait ParentRepository
 
         $values = implode(' UNION ALL', $values);
         $updateColumns = [];
-        $indis=0;
+        $indis = 0;
         foreach ($columnKeys as $key => $value) {
             if ($column != $value) {
                 $updateColumns[] = $value . "=" . $columns[$indis];
                 $indis++;
             }
-           
         }
         $updateColumns = implode(',', $updateColumns);
-        $sql = "UPDATE permissions tbl JOIN ( $values ) vals ON tbl.$column = vals.id SET $updateColumns;";
-        //print_r($sql);
-        //die();
+        $sql = "UPDATE $tablename tbl JOIN ( $values ) vals ON tbl.$column = vals.id SET $updateColumns;";
 
         $connection = $entityManager->getConnection();
         $stmt = $connection->prepare($sql);
@@ -94,4 +87,5 @@ trait ParentRepository
         $entityManager->flush();
         $connection->close();
     }
+
 }

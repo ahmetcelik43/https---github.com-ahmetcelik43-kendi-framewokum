@@ -8,46 +8,56 @@ use Doctrine\ORM\ORMSetup;
 
 class Database
 {
-    public $entityManager;
-    private $connection;
+    private static $instance = null; // Singleton instance
+    private static $entityManager;
+    private static $con;
 
-    function __destruct()
+    // Private constructor to prevent multiple instantiations
+    private function __construct()
     {
-        $this->connection->close();
-        $this->entityManager->flush();
-    }
-
-    public function __construct()
-    {
-        //require_once "vendor/autoload.php";
-
         // Create a simple "default" Doctrine ORM configuration for Attributes
         $config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [__DIR__ . '/src/Entity'],
-            isDevMode: true,
+            isDevMode: false,
         );
-        // or if you prefer XML
-        // $config = ORMSetup::createXMLMetadataConfiguration(
-        //    paths: [__DIR__ . '/config/xml'],
-        //    isDevMode: true,
-        //);
 
-
-        // configuring the database connection
+        // Configure the database connection
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_mysql',
             'user'     => 'root',
             'password' => 'Ahmet.4336',
             'dbname'   => 'doctrine',
+            'pooling' => true
         ], $config);
 
-        // obtaining the entity manager
+        // Obtain the entity manager
         $this->entityManager = new EntityManager($connection, $config);
-        $this->connection = $connection;
-    }
-    public function get() {
-        return $this->entityManager;
+        $this->con = $this->entityManager->getConnection();
     }
 
-   
+    // Singleton method to get the instance of Database
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+        return self::$instance;
+    }
+
+    // Method to return the EntityManager
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+    public function getConnection()
+    {
+        return $this->con;
+    }
+
+    // Destructor to clean up resources
+    /* function __destruct()
+    {
+        $this->connection->close();
+        $this->entityManager->flush();
+    }*/
 }

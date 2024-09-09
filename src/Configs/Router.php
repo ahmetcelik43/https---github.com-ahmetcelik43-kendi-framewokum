@@ -3,47 +3,81 @@
 class Router
 {
     private $routes = [];
+    private $filter = null;
+    private $isNotFound = true;
 
-    // GET metodu ile yönlendirme
+    function __destruct()
+    {
+        if ($this->isNotFound == true) {
+            return view("Errors/404");
+        }
+    }
+
     public function get($path, $callback)
     {
         $this->addRoute('GET', $path, $callback);
+        return $this;
     }
 
     // POST metodu ile yönlendirme
     public function post($path, $callback)
     {
         $this->addRoute('POST', $path, $callback);
+        return $this;
     }
 
+    // Filtreleri uygula
+    private function applyFilters()
+    {
+        if ($this->filter and !$this->filter->before()) {
+            return false;
+        }
+        return true;
+    }
+
+    // Filtre ekleme
+    public function filter($filterClass)
+    {
+        $this->filter = $filterClass;
+        return $this;
+    }
     // Yönlendirme ekleme fonksiyonu
     private function addRoute($method, $path, $callback)
     {
-        $this->routes[] = ['method' => $method, 'path' => $path, 'callback' => $callback];
+        $this->routes = ['method' => $method, 'path' => $path, 'callback' => $callback];
     }
 
     // İsteği işleyip uygun yolu bulma
-    public function dispatch()
+    public function dispatch(string $view = "")
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $requestUri=str_replace(config('Settings','base_path'),"",$requestUri);
+        $requestUri = str_replace(config('Settings', 'base_path'), "", $requestUri);
+        // Filtreleri uygula
 
-        foreach ($this->routes as $route) {
-            if ($route['method'] === $requestMethod && preg_match($this->convertToRegex($route['path']), $requestUri, $matches)) {
-                array_shift($matches); // İlk eleman tüm eşleşmeyi içerir, onu kaldırıyoruz
-                return call_user_func_array($route['callback'], $matches);
+        if ($this->routes['method'] === $requestMethod && preg_match($this->convertToRegex($this->routes['path']), $requestUri, $matches)) {
+            $this->isNotFound = false;
+            if (!$this->applyFilters()) {
+                view("Errors/$view", array());
+                $this->clearRoutes();
             }
+            array_shift($matches); 
+            call_user_func_array($this->routes['callback'], $matches);
+            $this->clearRoutes();
         }
-
-        // 404 Durum Kodu ve Sayfa
-        http_response_code(404);
-        echo '404 - Page not found';
+        $this->clearRoutes();
     }
 
     // URL parametrelerini işlemek için regex dönüştürme
     private function convertToRegex($path)
     {
         return "#^" . preg_replace('#\{[a-zA-Z0-9_]+\}#', '([a-zA-Z0-9_]+)', $path) . "$#";
+    }
+
+    private function clearRoutes()
+    {
+        $this->routes = [];
+        $this->filter = null;
+        return;
     }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Business\Middlewares\AdminLoginMiddleware;
+
 class AdminController extends BaseController
 {
     protected $generalData;
     public function __construct()
     {
-        //Helpers
-        include_once BASEPATH . "/src/Helpers/Admin/AdminHelper.php";
+        //AdminLoginMiddleware::before();
         $this->generalData["settings"] = config("Settings");
     }
 }

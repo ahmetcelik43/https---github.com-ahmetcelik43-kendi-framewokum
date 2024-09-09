@@ -3,18 +3,22 @@
 namespace App\Controllers\Admin;
 
 use App\Configs\Database;
+use App\Controllers\AdminController;
 use App\Controllers\BaseController;
 use App\Entity\Models\Permission;
 use App\Entity\Models\User;
 
-class Dashboard extends BaseController
+class Dashboard extends AdminController
 {
     private $entityManager;
-    public function __construct() {
-        $this->entityManager = (new Database())->get();
+    public function __construct()
+    {
+        parent::__construct();
+        $this->entityManager = Database::getInstance()->getEntityManager();
     }
     public function save($id = null)
     {
+        echo $id;
         // YETKI KAYDET
         $permission = new Permission();
         $permission->setName('Super Admin');
@@ -32,13 +36,13 @@ class Dashboard extends BaseController
     {
         $post = $_POST["data"];
         // BATCH INSERT
-        if (!empty($post))  $this->entityManager->getRepository(Permission::class)->batchInsert($post);
+        if (!empty($post))  $this->entityManager->getRepository(Permission::class)->batchInsert($post,$this->entityManager);
     }
 
     public function updateBatch()
     {
         $post = $_POST["data"];
         // BATCH INSERT
-        if (!empty($post)) $this->entityManager->getRepository(Permission::class)->batchupdate($post, "permissionid");
+        if (!empty($post)) $this->entityManager->getRepository(Permission::class)->batchupdate($post, "permissionid",$this->entityManager);
     }
 }
