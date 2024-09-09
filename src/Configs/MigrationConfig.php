@@ -10,7 +10,34 @@ use App\Entity\Repository\MigrationRepository;
 
 class MigrationConfig extends ParentRepository
 {
-
+    private function getMigrations()
+    {
+        $contents = file_get_contents(BASEPATH . "/src/configs/Migrations.json");
+        if ($contents == false) {
+            $content = '{
+                "Migrations": []
+            }';
+            file_put_contents(BASEPATH . "/src/configs/Migrations.json", $content);
+            $contents = [];
+        } else {
+            $contents = json_decode($contents, true)["Migrations"];
+        }
+        return $contents;
+    }
+    private function addMigration(string $executed)
+    {
+        $contents = file_get_contents(BASEPATH . "/src/configs/Migrations.json");
+        $contents = json_decode($contents, true);
+        $add = [];
+        foreach ($contents["Migrations"] as $value) {
+            $add[] = '"'.$value.'"';
+        }
+        $add[] = '"'.$executed.'"';
+        $content = '{
+            "Migrations": [' . implode(',', $add) . ']
+        }';
+        return file_put_contents(BASEPATH . "/src/configs/Migrations.json", $content);
+    }
     public static function create()
     {
         $filename = "Version" . time();
@@ -40,16 +67,13 @@ class MigrationConfig extends ParentRepository
             }
         }
 
-        $result = Migrations::select("version")->whereIn("version", $filenames)->get();
-        //debug($result);
+        //$result = Migrations::select("version")->whereIn("version", $filenames)->get()->toArray();
+        $result = $this->getMigrations();
         foreach ($filenames as $key => $value) {
             $value = str_replace(".php", '', $value);
-            foreach ($result as $vl) {
-                if ($value== $vl["version"]) {
-                    unset($filenames[$key]);
-                }
+            if (in_array($value, $result)) {
+                unset($filenames[$key]);
             }
-           
         }
 
         $execResult = [];
@@ -60,16 +84,12 @@ class MigrationConfig extends ParentRepository
 
             try {
                 if ($class->up() != false) {
+                    $this->addMigration($value);
                     $execResult[] = ["version" => $value, "executed_at" => date("Y-m-d H:i:s")];
                 }
             } catch (\Exception $th) {
                 //var_dump($th->getMessage());
             }
-        }
-
-        if (!empty($execResult)) {
-            (new ParentRepository())->insertBatch($execResult, "migrations");
-            //$this->insertBatch($execResult, "migrations", $entityManager);
         }
     }
 }

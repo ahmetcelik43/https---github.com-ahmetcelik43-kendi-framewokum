@@ -10,29 +10,31 @@ use App\Entity\Repository\UserRepository;
 class Home extends FrontController
 {
     private ICache $cacheManager;
-    private static $userService = null;
 
     public function __construct(ICache $cacheManager)
     {
         parent::__construct();
         $this->cacheManager = $cacheManager;
-        $this->userService = new UserRepository();
     }
 
     public function index()
     {
-        /* $cacheKey = 'home-cache';
+        /*$cacheKey = 'home-cache';
         if (!$this->cacheManager->isExpire($cacheKey)) {
-            $user = $this->entityManager->getRepository(User::class)->getAll($this->entityManager);
+            $user = UserRepository::getAll();
             $cacheValue = viewData("Admin/Dashboard", $user);
             $this->cacheManager->getAndSave($cacheKey, $cacheValue);
             return finish($cacheValue);
         }
-        return finish($this->cacheManager->get($cacheKey));*/
+        return finish($this->cacheManager->get($cacheKey));
+        */
+        $user = UserRepository::getAll();
+        $cacheValue = viewData("Admin/Dashboard", $user);
+        return finish($cacheValue);
 
-        $user = $this->userService->getAll();
+       
         //$cacheValue = viewData("Admin/Dashboard", $user);
-        debug($user);
+        //debug($user);
         
         $post=array(
             array("permissionid"=>1,"permissionname"=>"Super Admin","permissions"=>"permission"),

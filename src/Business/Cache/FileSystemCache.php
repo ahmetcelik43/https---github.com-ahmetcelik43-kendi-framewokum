@@ -14,7 +14,6 @@ class FileSystemCache implements ICache
 
     function getAndSave(string $key, $data)
     {
-        $this->cacheManager = new FilesystemAdapter();
         $cacheItem = $this->cacheManager->getItem($key);
         if (!$cacheItem->isHit()) {
             $expire = config("Settings", "cacheExpire");
@@ -38,8 +37,8 @@ class FileSystemCache implements ICache
     {
         $this->cacheManager->deleteItem($key);
     }
-    function clear($key)
+    function clear()
     {
-        $this->cacheManager->deleteItem($key);
+        $this->cacheManager->clear();
     }
 }

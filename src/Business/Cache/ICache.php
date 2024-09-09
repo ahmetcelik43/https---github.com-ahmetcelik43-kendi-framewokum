@@ -7,7 +7,7 @@ interface ICache
     function getAndSave(string $key,$data);
     function get(string $key);
     function delete(string $key);
-    function clear($key);
+    function clear();
     function isExpire($key);
 }
 

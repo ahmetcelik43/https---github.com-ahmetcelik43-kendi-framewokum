@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Dashboard 121</h1>
-    <?=  $data[0]["username"]?>
+    <h1>Dashboard</h1>
+    <?=  $data[0]["welcome"]?>
 </body>
 </html>

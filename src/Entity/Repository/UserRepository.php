@@ -13,7 +13,7 @@ class UserRepository extends ParentRepository
        parent::__construct();
     }
 
-    public function getAll()
+    public static function getAll()
     {
         return User::with(["permission"])->get()->toArray();
     }

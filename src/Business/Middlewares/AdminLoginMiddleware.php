@@ -10,10 +10,7 @@ class AdminLoginMiddleware extends Middlewares
     {
         session_start();
         $adminSessionName = config('Settings', 'adminSessionName');
-        if (!isset($_SESSION[$adminSessionName])) {
-            return false;
-        }
-        return true;
+        return isset($_SESSION[$adminSessionName]);
     }
     public function after() {}
 }
