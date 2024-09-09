@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 class FrontController extends BaseController
 {
-  public function __construct() {
-    
-  }
+
+    public function __construct()
+    {
+   
+    }
 }

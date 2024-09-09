@@ -2,9 +2,14 @@
 
 namespace App\Entity\Repository;
 
-trait ParentRepository
+use Illuminate\Database\Capsule\Manager as DB;
+
+class ParentRepository
 {
-    public function insertBatch(array $userbatch = array(), $tablename, $entityManager)
+    public function __construct() {
+        require 'bootstrap.php';
+    }
+    public function insertBatch(array $userbatch = array(), $tablename)
     {
         $columnKeys = array_keys(array_values($userbatch)[0]);
         $columnKeys = implode(',', $columnKeys);
@@ -18,19 +23,17 @@ trait ParentRepository
         }
         $values = implode(',', $values);
         $sql = "INSERT INTO $tablename ($columnKeys) VALUES $values;";
-        $connection = $entityManager->getConnection();
-        $stmt = $connection->prepare($sql);
+
+        $params = [];
         foreach ($userbatch as $key => $value) {
             foreach ($value as $key2 => $vl) {
-                $stmt->bindValue($key . $key2, $vl);
+                $params[($key . $key2)] = $vl;
             }
         }
-        $stmt->executeQuery();
-        $entityManager->flush();
-        $connection->close();
+        return DB::statement($sql, $params);
     }
 
-    public function updateBatch(array $userbatch = array(), string $column, $tablename, $entityManager)
+    public function updateBatch(array $userbatch = array(), string $column, $tablename)
     {
         $columnKeys = array_keys(array_values($userbatch)[0]);
         $values = [];
@@ -69,23 +72,18 @@ trait ParentRepository
                 $indis++;
             }
         }
+        $params = [];
         $updateColumns = implode(',', $updateColumns);
         $sql = "UPDATE $tablename tbl JOIN ( $values ) vals ON tbl.$column = vals.id SET $updateColumns;";
-
-        $connection = $entityManager->getConnection();
-        $stmt = $connection->prepare($sql);
         foreach ($userbatch as $key => $value) {
             for ($i = 0; $i < count($columnKeys); $i++) {
                 if ($columnKeys[$i] == $column) {
-                    $stmt->bindValue(("id" . $key . $i), $userbatch[$key][$columnKeys[$i]]);
+                    $params[("id" . $key . $i)] = $userbatch[$key][$columnKeys[$i]];
                 } else {
-                    $stmt->bindValue(("field" . $key . $i), $userbatch[$key][$columnKeys[$i]]);
+                    $params[("field" . $key . $i)] = $userbatch[$key][$columnKeys[$i]];
                 }
             }
         }
-        $stmt->executeQuery();
-        $entityManager->flush();
-        $connection->close();
+        return DB::statement($sql, $params);
     }
-
 }

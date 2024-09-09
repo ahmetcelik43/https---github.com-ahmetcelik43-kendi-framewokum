@@ -14,6 +14,7 @@ class Home extends FrontController
 
     public function __construct(ICache $cacheManager)
     {
+        parent::__construct();
         $this->cacheManager = $cacheManager;
         $this->userService = new UserRepository();
     }
@@ -30,11 +31,15 @@ class Home extends FrontController
         return finish($this->cacheManager->get($cacheKey));*/
 
         $user = $this->userService->getAll();
-        $cacheValue = viewData("Admin/Dashboard", $user);
-        return finish($cacheValue);
-    }
-    public function delete($id = 123)
-    {
-        return finish(123);
+        //$cacheValue = viewData("Admin/Dashboard", $user);
+        debug($user);
+        
+        $post=array(
+            array("permissionid"=>1,"permissionname"=>"Super Admin","permissions"=>"permission"),
+            array("permissionid"=>2,"permissionname"=>"Admin","permissions"=>"permission"),
+            array("permissionid"=>3,"permissionname"=>"Site Manager","permissions"=>"permission")
+        );
+        //debug($this->userService->insertBatch($post,"permissions"));
+
     }
 }

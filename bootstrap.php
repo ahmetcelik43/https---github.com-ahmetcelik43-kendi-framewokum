@@ -1,30 +1,26 @@
 <?php
-// bootstrap.php
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
 
-require_once "vendor/autoload.php";
+require 'vendor/autoload.php';
 
-// Create a simple "default" Doctrine ORM configuration for Attributes
-$config = ORMSetup::createAttributeMetadataConfiguration(
-    paths: [__DIR__ . '/src/Entity'],
-    isDevMode: true,
-);
-// or if you prefer XML
-// $config = ORMSetup::createXMLMetadataConfiguration(
-//    paths: [__DIR__ . '/config/xml'],
-//    isDevMode: true,
-//);
+use Illuminate\Database\Capsule\Manager as Capsule;
 
+// Eloquent ORM için Capsule kurulumunu başlatıyoruz
+$capsule = new Capsule;
 
-// configuring the database connection
-$connection = DriverManager::getConnection([
-    'driver' => 'pdo_mysql',
-    'user'     => 'root',
-    'password' => 'Ahmet.4336',
-    'dbname'   => 'doctrine',
-], $config);
+// Veritabanı bağlantı ayarlarını yapıyoruz
+$capsule->addConnection([
+    'driver'    => 'mysql',
+    'host'      => '127.0.0.1',
+    'database'  => 'doctrine',
+    'username'  => 'root',
+    'password'  => 'Ahmet.4336',
+    'charset'   => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    'prefix'    => '',
+]);
 
-// obtaining the entity manager
-$entityManager = new EntityManager($connection, $config);
+// ORM kullanımı için gerekli olan global fonksiyonları yükle
+$capsule->setAsGlobal();
+
+// Eloquent ORM'i başlatıyoruz
+$capsule->bootEloquent();

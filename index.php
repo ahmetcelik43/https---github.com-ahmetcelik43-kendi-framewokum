@@ -6,10 +6,9 @@ use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
 use App\Business\Middlewares\AdminLoginMiddleware;
 use App\Business\ServiceContainer;
-use App\Configs\Migrations;
+use App\Configs\MigrationConfig;
 use App\Controllers\Home;
 use App\Controllers\Admin\Dashboard;
-use App\Controllers\Database;
 use App\Controllers\MigrationController;
 
 ini_set('display_errors', '1');
@@ -28,6 +27,8 @@ $container->set(ICache::class, function () {
     return $instance;
 });
 $cacheManager = $container->get(ICache::class);
+$migrations = new MigrationConfig();
+$migrations->control();
 $router = new Router();
 $router->get('/', [(new Home($cacheManager)), 'index'])->dispatch();
 $router->get('/mig-create', [(new MigrationController()), 'create'])->dispatch();
@@ -38,7 +39,6 @@ $router->get('/save', [(new Dashboard()), 'save'])->dispatch();
 $router->post('/dashboard/insertBatch', [(new Dashboard()), 'insertBatch'])->dispatch();
 $router->post('/dashboard/updateBatch', [(new Dashboard()), 'updateBatch'])->dispatch();
 
-$migrations = new Migrations();
-$migrations->control();
+
 
 

@@ -10,9 +10,10 @@
         "name": "AhmetÇelik"
     }],
     "require": {
-        "doctrine/orm": "^3.2",
-        "doctrine/dbal": "^4.1",
-        "symfony/cache": "^7.1",
-        "symfony/console": "^7.1"
+        "illuminate/database": "11.22.0",
+        "symfony/cache": "7.1.4",
+        "opis/closure": "^3.6",
+        "laravel/serializable-closure": "^1.0"
+
     }
 }

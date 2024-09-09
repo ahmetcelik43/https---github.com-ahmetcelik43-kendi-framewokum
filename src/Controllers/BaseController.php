@@ -4,5 +4,8 @@ namespace App\Controllers;
 
 class BaseController
 {
-    function __construct() {}
+    public function __construct()
+    {
+   
+    }
 }
