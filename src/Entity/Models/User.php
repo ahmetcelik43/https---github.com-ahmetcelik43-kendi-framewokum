@@ -21,7 +21,6 @@ class User extends Model
 
     public $incrementing = true;
 
-
     protected $fillable = ["username", "useremail", "userpermission"];
 
     public function permission()

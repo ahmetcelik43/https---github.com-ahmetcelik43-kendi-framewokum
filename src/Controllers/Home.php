@@ -2,8 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Configs\Database;
-use App\Entity\Models\User;
+use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
 use App\Entity\Repository\UserRepository;
 
@@ -14,7 +13,7 @@ class Home extends FrontController
     public function __construct(ICache $cacheManager)
     {
         parent::__construct();
-        $this->cacheManager = $cacheManager;
+        $this->cacheManager =  $cacheManager;
     }
 
     public function index()

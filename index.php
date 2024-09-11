@@ -1,7 +1,4 @@
 <?php
-// doctrine-migrations generate --configuration=../../migrations.php
-// doctrine-migrations status --configuration=../../migrations.php --db-configuration=../../migrations-db.php
-// doctrine-migrations migrate --configuration=../../migrations.php --db-configuration=../../migrations-db.php
 use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
 use App\Business\Middlewares\AdminLoginMiddleware;
@@ -30,15 +27,7 @@ $cacheManager = $container->get(ICache::class);
 $migrations = new MigrationConfig();
 $migrations->control();
 $router = new Router();
-$router->get('/', [(new Home($cacheManager)), 'index'])->dispatch();
-$router->get('/mig-create', [(new MigrationController()), 'create'])->dispatch();
-$router->get('/delete', [(new Home($cacheManager)), 'delete'])->dispatch();
-$router->get('/dashboard', [(new Dashboard()), 'save'])->filter(new AdminLoginMiddleware())->dispatch("403");
-$router->get('/save/{id}', [(new Dashboard()), 'save'])->dispatch();
-$router->get('/save', [(new Dashboard()), 'save'])->dispatch();
-$router->post('/dashboard/insertBatch', [(new Dashboard()), 'insertBatch'])->dispatch();
-$router->post('/dashboard/updateBatch', [(new Dashboard()), 'updateBatch'])->dispatch();
-
-
-
-
+$router->get('/', ["class"=>Home::class,"method"=>"index"])->dispatch(paramClasses:[$cacheManager]);
+$router->get('/mig-create', ["class"=>MigrationController::class,"index"])->dispatch();
+$router->get('/dashboard', ["class"=>Dashboard::class, "method"=>'save'])->filter(new AdminLoginMiddleware())->dispatch(view:"403");
+$router->get('/save/{id}', ["class"=>Dashboard::class, "method"=>'save'])->dispatch();

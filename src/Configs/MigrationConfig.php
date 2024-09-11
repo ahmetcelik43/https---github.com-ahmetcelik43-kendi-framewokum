@@ -4,9 +4,6 @@ namespace App\Configs;
 
 use App\Configs\Database;
 use App\Entity\Repository\ParentRepository;
-use Illuminate\Database\Capsule\Manager as DB;
-use App\Entity\Models\Migrations;
-use App\Entity\Repository\MigrationRepository;
 
 class MigrationConfig extends ParentRepository
 {

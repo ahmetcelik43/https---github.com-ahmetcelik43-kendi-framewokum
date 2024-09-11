@@ -12,40 +12,36 @@ use App\Entity\Repository\UserRepository;
 
 class Dashboard extends AdminController
 {
-    private $permissionService = null;
-    private $userService = null;
     public function __construct()
     {
         parent::__construct();
-        $this->permissionService = new PermissionRepository();
-        $this->userService = new UserRepository();
     }
     public function save($id = null)
     {
         // YETKI KAYDET
+        $permissionData = $_POST["permission"];
         $permission = new Permission();
-        $permission->setName('Super Admin');
-        $permission->setPermissions("");
-        $permission = $this->permissionService->save($permission);
+        $permission->fill($permissionData);
+        $permission = PermissionRepository::save($permission, $id);
         // KULLANICI KAYDET
+        $userData = $_POST["user"];
+        $userData['userpermission'] = $permission->permissionid;
         $user = new User();
-        $user->setUserName('Ahmet Çelik');
-        $user->setUserEmail('ahmetcelik@hiosis.com');
-        $user->setUserPermission($permission->getId());
-        $this->userService->save($user);
+        $user->fill($userData);
+        UserRepository::save($user, $id);
         print_r($user);
     }
     public function insertBatch()
     {
         $post = $_POST["data"];
         // BATCH INSERT
-        if (!empty($post))  $this->permissionService->batchInsert($post);
+        if (!empty($post)) (new PermissionRepository())->insertBatch($post, 'permissions');
     }
 
     public function updateBatch()
     {
         $post = $_POST["data"];
         // BATCH INSERT
-        if (!empty($post)) $this->permissionService->batchupdate($post, "permissionid");
+        if (!empty($post)) (new PermissionRepository())->updateBatch($post, "permissionid", 'permissions');
     }
 }

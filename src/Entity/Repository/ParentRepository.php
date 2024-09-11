@@ -6,7 +6,8 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ParentRepository
 {
-    public function __construct() {
+    public function __construct()
+    {
         require 'bootstrap.php';
     }
     public function insertBatch(array $userbatch = array(), $tablename)

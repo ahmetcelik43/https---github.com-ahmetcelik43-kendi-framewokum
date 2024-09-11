@@ -48,7 +48,7 @@ class Router
     }
 
     // İsteği işleyip uygun yolu bulma
-    public function dispatch(string $view = "")
+    public function dispatch(string $view = "", $paramClasses = [])
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -61,8 +61,9 @@ class Router
                 view("Errors/$view", array());
                 $this->clearRoutes();
             }
-            array_shift($matches); 
-            call_user_func_array($this->routes['callback'], $matches);
+            $class = $this->routes['callback'];
+            (new $class["class"](...$paramClasses))->{$class["method"]}(...$matches);
+            array_shift($matches);
             $this->clearRoutes();
         }
         $this->clearRoutes();
