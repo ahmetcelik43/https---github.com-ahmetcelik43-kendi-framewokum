@@ -30,3 +30,13 @@ function finish($value)
 {
     echo($value);
 }
+function encryptData($data) {
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    $encryptedData = openssl_encrypt($data, 'aes-256-cbc', ENCRYPTION_KEY, 0, $iv);
+    return base64_encode($encryptedData . '::' . $iv);
+}
+
+function decryptData($encryptedData) {
+    list($encryptedData, $iv) = explode('::', base64_decode($encryptedData), 2);
+    return openssl_decrypt($encryptedData, 'aes-256-cbc', ENCRYPTION_KEY, 0, $iv);
+}

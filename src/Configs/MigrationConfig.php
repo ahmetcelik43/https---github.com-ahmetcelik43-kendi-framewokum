@@ -27,9 +27,9 @@ class MigrationConfig extends ParentRepository
         $contents = json_decode($contents, true);
         $add = [];
         foreach ($contents["Migrations"] as $value) {
-            $add[] = '"'.$value.'"';
+            $add[] = '"' . $value . '"';
         }
-        $add[] = '"'.$executed.'"';
+        $add[] = '"' . $executed . '"';
         $content = '{
             "Migrations": [' . implode(',', $add) . ']
         }';
@@ -37,6 +37,9 @@ class MigrationConfig extends ParentRepository
     }
     public static function create()
     {
+        if (!file_exists($path = BASEPATH . '/src/Entity/Migrations')) {
+            mkdir($path);
+        }
         $filename = "Version" . time();
         $contents = "<?php
         namespace App\Entity\Migrations;
@@ -47,7 +50,7 @@ class MigrationConfig extends ParentRepository
         }
         ";
 
-        file_put_contents(BASEPATH . "/src/Entity/Migrations/$filename.php", $contents);
+        file_put_contents($path  . "/$filename.php", $contents);
         return 'ok';
     }
     public function control()

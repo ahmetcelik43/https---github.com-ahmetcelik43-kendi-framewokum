@@ -1,8 +1,8 @@
 <?php
         namespace App\Entity\Migrations;
-        class Version1725915520{
+        class Version1726076190{
             public function up(){
-                return true;
+                return false;
             }
         }
         

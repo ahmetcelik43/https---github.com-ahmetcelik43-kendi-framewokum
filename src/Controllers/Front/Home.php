@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Front;
 
 use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
+use App\Controllers\FrontController;
 use App\Entity\Repository\UserRepository;
 
 class Home extends FrontController

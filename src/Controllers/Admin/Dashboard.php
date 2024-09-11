@@ -16,8 +16,9 @@ class Dashboard extends AdminController
     {
         parent::__construct();
     }
-    public function save($id = null)
+    public function save($id = null, $id2 = null)
     {
+        debug($id . "-" . $id2);
         // YETKI KAYDET
         $permissionData = $_POST["permission"];
         $permission = new Permission();

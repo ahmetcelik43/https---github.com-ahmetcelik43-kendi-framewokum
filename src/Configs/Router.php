@@ -38,7 +38,7 @@ class Router
     // Filtre ekleme
     public function filter($filterClass)
     {
-        $this->filter = $filterClass;
+        $this->filter = new $filterClass();
         return $this;
     }
     // Yönlendirme ekleme fonksiyonu
@@ -58,12 +58,13 @@ class Router
         if ($this->routes['method'] === $requestMethod && preg_match($this->convertToRegex($this->routes['path']), $requestUri, $matches)) {
             $this->isNotFound = false;
             if (!$this->applyFilters()) {
-                view("Errors/$view", array());
+                header("HTTP/1.1 $view");
+                view("Errors/$view");
                 $this->clearRoutes();
             }
             $class = $this->routes['callback'];
-            (new $class["class"](...$paramClasses))->{$class["method"]}(...$matches);
             array_shift($matches);
+            (new $class[0](...$paramClasses))->{$class[1]}(...$matches);
             $this->clearRoutes();
         }
         $this->clearRoutes();
