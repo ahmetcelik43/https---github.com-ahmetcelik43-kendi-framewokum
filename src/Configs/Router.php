@@ -1,5 +1,7 @@
 <?php
 
+use App\Controllers\ImageController;
+
 class Router
 {
     private $routes = [];
@@ -54,7 +56,17 @@ class Router
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $requestUri = str_replace(config('Settings', 'base_path'), "", $requestUri);
         // Filtreleri uygula
+        $pattern = "#^/public/upload/([a-zA-Z0-9_\-\.]+)(?:\?.*)?$#";
 
+        if (preg_match($pattern, $requestUri, $matches)) {
+            $this->isNotFound = false;
+            // Dosya adı
+            $filename = $matches[1];
+            array_shift($matches);
+            // İlgili handler'ı çağır
+            (new ImageController())->index($filename);
+            
+        }
         if ($this->routes['method'] === $requestMethod && preg_match($this->convertToRegex($this->routes['path']), $requestUri, $matches)) {
             $this->isNotFound = false;
             if (!$this->applyFilters()) {
