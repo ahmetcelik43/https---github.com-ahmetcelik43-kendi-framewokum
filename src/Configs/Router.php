@@ -1,24 +1,73 @@
 <?php
 
+use App\Business\Cache\ICache;
+use App\Business\Middlewares\AdminLoginMiddleware;
+use App\Controllers\Admin\Dashboard;
+use App\Controllers\Admin\LoginController;
+use App\Controllers\Front\Home;
 use App\Controllers\ImageController;
+use App\Controllers\MigrationController;
 
 class Router
 {
     private $routes = [];
     private $filter = null;
     private $isNotFound = true;
+    private $searchname = null;
+    public  $foundedUrl = null;
+    public $routeAll = [];
+    public $providers = [];
 
     function __destruct()
     {
-        if ($this->isNotFound == true) {
+        if ($this->isNotFound == true and !$this->searchname) {
             return view("Errors/404");
         }
+    }
+    public function __construct(ICache $cacheManager = null)
+    {
+        $this->providers["cacheManager"] = $cacheManager;
     }
 
     public function get($path, $callback)
     {
         $this->addRoute('GET', $path, $callback);
         return $this;
+    }
+    public function saltRoutes($name = null)
+    {
+        $routeAll = [
+            ["path" => "/", "class" => Home::class, "action" => "index", "paramClasses" => [$this->providers["cacheManager"]], "name" => "home.index"],
+            ["path" => "/mig-create", "class" => MigrationController::class, "action" => "paramClasses", "name" => "migrate"],
+            ["path" => "/login", "class" => LoginController::class, "action" => "login", "name" => "login.index"],
+            ["path" => "/logout", "class" => LoginController::class, "action" => "logout", "name" => "login.index", "filter" => AdminLoginMiddleware::class, "view" => "403"],
+            ["path" => "/image", "class" => ImageController::class, "action" => "index", "name" => "image"],
+        ];
+       
+        if ($name) {
+            $this->searchname = $name;
+            foreach ($routeAll as $item) {
+                if ($item["name"] == $name) {
+                    return $item["path"];
+                }
+            }
+        }
+        return $routeAll;
+    }
+    public function routesInit($name = "")
+    {
+        foreach ($this->saltRoutes() as $route) {
+            if(isset($route["method"])){
+                $this->{$route["method"]}($route["path"], [$route["class"], $route["action"]])
+                ->filter(($route["filter"] ?? null))
+                ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
+            }else{
+                $this->get($route["path"], [$route["class"], $route["action"]])
+                ->filter(($route["filter"] ?? null))
+                ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
+            }
+            
+        }
     }
 
     // POST metodu ile yönlendirme
@@ -40,6 +89,9 @@ class Router
     // Filtre ekleme
     public function filter($filterClass)
     {
+        if ($filterClass == null) {
+            return $this;
+        }
         $this->filter = new $filterClass();
         return $this;
     }
@@ -50,7 +102,7 @@ class Router
     }
 
     // İsteği işleyip uygun yolu bulma
-    public function dispatch(string $view = "", $paramClasses = [])
+    public function dispatch(string $view = null, $paramClasses = [], string $name = null)
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -65,7 +117,6 @@ class Router
             array_shift($matches);
             // İlgili handler'ı çağır
             (new ImageController())->index($filename);
-            
         }
         if ($this->routes['method'] === $requestMethod && preg_match($this->convertToRegex($this->routes['path']), $requestUri, $matches)) {
             $this->isNotFound = false;

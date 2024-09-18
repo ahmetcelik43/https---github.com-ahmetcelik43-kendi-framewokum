@@ -28,6 +28,7 @@ class Home extends FrontController
         }
         return finish($this->cacheManager->get($cacheKey));
         */
+        var_dump(baseurl("image"));die();
         $user = UserRepository::getAll();
         $cacheValue = viewData("Admin/Dashboard", $user);
         return finish($cacheValue);

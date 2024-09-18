@@ -24,8 +24,12 @@ defined('BASEPATH')  or define('BASEPATH', __DIR__);
 defined('ENCRYPTION_KEY') or define('ENCRYPTION_KEY', 'cursorsoftahmetcelik4336');
 if (!file_exists($pathupload = BASEPATH . "/public")) {
     mkdir($pathupload);
-    mkdir($pathupload."/upload");
+    mkdir($pathupload . "/upload");
 }
+
+$migrations = new MigrationConfig();
+$migrations->control();
+
 $container = new ServiceContainer();
 $container->set(ICache::class, function () {
     static $instance = null;
@@ -35,13 +39,7 @@ $container->set(ICache::class, function () {
     return $instance;
 });
 $cacheManager = $container->get(ICache::class);
-$migrations = new MigrationConfig();
-$migrations->control();
-$router = new Router();
-$router->get('/', [Home::class, "index"])->dispatch(paramClasses: [$cacheManager]);
-$router->get('/mig-create', [MigrationController::class, "create"])->dispatch();
-$router->get('/login', [LoginController::class, "login"])->dispatch();
-$router->get('/logout', [LoginController::class, "logout"])->filter(AdminLoginMiddleware::class)->dispatch(view: "403");
-$router->get('/dashboard', [Dashboard::class, "save"])->filter(AdminLoginMiddleware::class)->dispatch(view: "403");
-$router->get('/save/{id}/{id2}', [Dashboard::class, "save"])->dispatch();
-$router->get('/image', [ImageController::class, "index"])->dispatch();
+$paramProviders=[$cacheManager];
+$router = new Router(...$paramProviders);
+$router->routesInit();
+

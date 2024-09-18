@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 class ImageController extends BaseController
 {
-    public function index($path = "")
+    public function index()
     {
         $urlImage = url();
         $parsedUrl = parse_url($urlImage);
@@ -13,6 +13,6 @@ class ImageController extends BaseController
         $height = $_GET["h"];
         $quality = $_GET["q"];
         $crop = $_GET["c"];
-        imageResize2($filename, $width, $height, $crop, $quality);
+        imageResize($filename, $width, $height, $crop, $quality);
     }
 }

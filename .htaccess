@@ -5,6 +5,9 @@
 
     RewriteEngine On
     RewriteRule ^src/ - [F]
+    RewriteRule ^bootstrap.php - [F]
+    RewriteRule ^composer.json - [F]
+    RewriteRule ^composer.lock - [F]
 
 
 
