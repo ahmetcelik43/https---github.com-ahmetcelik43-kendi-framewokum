@@ -15,16 +15,7 @@ class Eloquent extends Database
         $capsule = new Capsule;
 
         // Veritabanı bağlantı ayarlarını yapıyoruz
-        $capsule->addConnection([
-            'driver'    => 'mysql',
-            'host'      => '127.0.0.1',
-            'database'  => 'doctrine',
-            'username'  => 'root',
-            'password'  => 'Ahmet.4336',
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-        ]);
+        $capsule->addConnection(config('Settings','default_database'));
 
         // ORM kullanımı için gerekli olan global fonksiyonları yükle
         $capsule->setAsGlobal();

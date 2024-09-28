@@ -1,16 +1,12 @@
-<?php
-
-$config["base_path"] = "/doc2";
-$config["cacheExpire"] = 300;
-$config["adminSessionName"] = $_SERVER["HTTP_HOST"];
-$config["default_database"] = [
-    'driver'    => 'mysql',
-    'host'      => '127.0.0.1',
-    'database'  => 'doctrine',
-    'username'  => 'root',
-    'password'  => 'Ahmet.4336',
-    'charset'   => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix'    => '',
-];
-
+<?php 
+$config['base_path']='/doc2';
+$config['cacheExpire']='300';
+$config['adminSessionName']='localhost:88';
+$config['default_database']['driver']='mysql';
+$config['default_database']['host']='127.0.0.1';
+$config['default_database']['database']='php';
+$config['default_database']['username']='root';
+$config['default_database']['password']='Ahmet.4336';
+$config['default_database']['charset']='utf8';
+$config['default_database']['collation']='utf8_unicode_ci';
+$config['default_database']['prefix']='';

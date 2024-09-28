@@ -57,6 +57,7 @@ class ComposerStaticInitbee0201db5fa01f5f20e521a94084737
             'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
+            'INSTALL\\' => 8,
         ),
         'D' => 
         array (
@@ -164,6 +165,10 @@ class ComposerStaticInitbee0201db5fa01f5f20e521a94084737
         'Illuminate\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
+        ),
+        'INSTALL\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/install',
         ),
         'Doctrine\\Inflector\\' => 
         array (
