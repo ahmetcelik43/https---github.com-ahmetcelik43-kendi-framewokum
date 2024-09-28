@@ -1,18 +1,13 @@
 <?php
 
-namespace App\Entity\Repository;
+namespace App\Entity\Repository\Eloquent;
 
 use App\Entity\Models\User;
+use App\Entity\Repository\BaseUserRepository;
 
-class UserRepository extends ParentRepository
-{
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public static function getAll()
+class UserEloquentRepository extends BaseUserRepository
+{    
+    public function getAll()
     {
         return User::with(["permission"])->get()->toArray();
     }

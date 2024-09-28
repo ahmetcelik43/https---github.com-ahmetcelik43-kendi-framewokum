@@ -1,12 +1,17 @@
 <?php
 
+use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
+use App\Business\Database\Database;
 use App\Business\Middlewares\AdminLoginMiddleware;
-use App\Controllers\Admin\Dashboard;
+use App\Business\ServiceContainer;
+use App\Controllers\Admin\Crud\CrudController;
 use App\Controllers\Admin\LoginController;
 use App\Controllers\Front\Home;
 use App\Controllers\ImageController;
 use App\Controllers\MigrationController;
+use App\Entity\Repository\BaseUserRepository;
+use App\Entity\Repository\Doctrine\UserDoctrineRepository;
 
 class Router
 {
@@ -24,9 +29,10 @@ class Router
             return view("Errors/404");
         }
     }
-    public function __construct(ICache $cacheManager = null)
+    public function __construct()
     {
-        $this->providers["cacheManager"] = $cacheManager;
+        $container = new ServiceContainer();
+        $this->providers = $container->services();
     }
 
     public function get($path, $callback)
@@ -37,13 +43,22 @@ class Router
     public function saltRoutes($name = null)
     {
         $routeAll = [
-            ["path" => "/", "class" => Home::class, "action" => "index", "paramClasses" => [$this->providers["cacheManager"]], "name" => "home.index"],
+            ["path" => "/", "class" => Home::class, "action" => "index", "paramClasses" => [$this->providers["cacheManager"], $this->providers["userManager"]], "name" => "home.index"],
             ["path" => "/mig-create", "class" => MigrationController::class, "action" => "paramClasses", "name" => "migrate"],
             ["path" => "/login", "class" => LoginController::class, "action" => "login", "name" => "login.index"],
             ["path" => "/logout", "class" => LoginController::class, "action" => "logout", "name" => "login.index", "filter" => AdminLoginMiddleware::class, "view" => "403"],
             ["path" => "/image", "class" => ImageController::class, "action" => "index", "name" => "image"],
+            ["path" => "/crud/{name}", "class" => CrudController::class, "action" => "index", "name" => "crud.index"],
+            ["path" => "/crud/get/{name}", "class" => CrudController::class, "action" => "get", "name" => "crud.get"],
+            ["path" => "/crud/get/{name}/{id}", "class" => CrudController::class, "action" => "get", "name" => "crud.get2"],
+            ["path" => "/crud/save/{name}", "class" => CrudController::class, "action" => "save", "name" => "crud.save", "method" => "POST"],
+            ["path" => "/crud/save/{name}/{id}", "class" => CrudController::class, "action" => "save", "name" => "crud.save2", "method" => "POST"],
+            ["path" => "/crud/delete/{name}/{id}", "class" => CrudController::class, "action" => "delete", "name" => "crud.delete"],
+            ["path" => "/list", "class" => Home::class, "action" => "list", "paramClasses" => [$this->providers["cacheManager"], $this->providers["userManager"]], "name" => "home.index"],
+
+
         ];
-       
+
         if ($name) {
             $this->searchname = $name;
             foreach ($routeAll as $item) {
@@ -57,16 +72,15 @@ class Router
     public function routesInit($name = "")
     {
         foreach ($this->saltRoutes() as $route) {
-            if(isset($route["method"])){
+            if (isset($route["method"])) {
                 $this->{$route["method"]}($route["path"], [$route["class"], $route["action"]])
-                ->filter(($route["filter"] ?? null))
-                ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
-            }else{
+                    ->filter(($route["filter"] ?? null))
+                    ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
+            } else {
                 $this->get($route["path"], [$route["class"], $route["action"]])
-                ->filter(($route["filter"] ?? null))
-                ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
+                    ->filter(($route["filter"] ?? null))
+                    ->dispatch(view: $route["view"], paramClasses: ($route["paramClasses"] ?? []));
             }
-            
         }
     }
 

@@ -1,5 +1,12 @@
 <?php
+
 namespace App\Business;
+
+use App\Business\Cache\FileSystemCache;
+use App\Business\Cache\ICache;
+use App\Entity\Repository\BaseUserRepository;
+use App\Entity\Repository\Doctrine\UserDoctrineRepository;
+use App\Entity\Repository\Eloquent\UserEloquentRepository;
 
 class ServiceContainer
 {
@@ -50,5 +57,29 @@ class ServiceContainer
         }
 
         return $reflection->newInstanceArgs($dependencies);
+    }
+
+    function services()
+    {
+        // cache continer
+        $this->set(ICache::class, function () {
+            static $instance = null;
+            if ($instance === null) {
+                $instance = new FileSystemCache();
+            }
+            return $instance;
+        });
+
+        $this->set(BaseUserRepository::class, function () {
+            static $instance = null;
+            if ($instance === null) {
+                $instance = new UserEloquentRepository();
+            }
+            return $instance;
+        });
+
+        $providers["cacheManager"] = $this->get(ICache::class);
+        $providers["userManager"] = $this->get(BaseUserRepository::class);
+        return $providers;
     }
 }

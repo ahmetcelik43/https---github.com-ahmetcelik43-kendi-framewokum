@@ -178,10 +178,13 @@ function urlto($name)
     $router = new Router();
     return $router->saltRoutes($name);
 }
-function baseurl($name)
+function baseurl($name, $params = [])
 {
     $router = new Router();
     $path = $router->saltRoutes($name);
-    return url(ispath:false).config('Settings','base_path').$path;
-    
+    $url = url(ispath: false) . config('Settings', 'base_path') . $path;
+    foreach ($params as $key => $value) {
+        $url = str_replace('{' . $key . '}', $value, $url);
+    }
+    return $url;
 }

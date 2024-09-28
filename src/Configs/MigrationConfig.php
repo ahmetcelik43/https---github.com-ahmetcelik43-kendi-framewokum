@@ -2,10 +2,7 @@
 
 namespace App\Configs;
 
-use App\Configs\Database;
-use App\Entity\Repository\ParentRepository;
-
-class MigrationConfig extends ParentRepository
+class MigrationConfig
 {
     private function getMigrations()
     {
@@ -88,7 +85,7 @@ class MigrationConfig extends ParentRepository
                     $execResult[] = ["version" => $value, "executed_at" => date("Y-m-d H:i:s")];
                 }
             } catch (\Exception $th) {
-                //var_dump($th->getMessage());
+                var_dump($th->getMessage());
             }
         }
     }
