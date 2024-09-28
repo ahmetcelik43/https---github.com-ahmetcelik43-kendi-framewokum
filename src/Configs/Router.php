@@ -48,12 +48,12 @@ class Router
             ["path" => "/login", "class" => LoginController::class, "action" => "login", "name" => "login.index"],
             ["path" => "/logout", "class" => LoginController::class, "action" => "logout", "name" => "login.index", "filter" => AdminLoginMiddleware::class, "view" => "403"],
             ["path" => "/image", "class" => ImageController::class, "action" => "index", "name" => "image"],
-            ["path" => "/crud/{name}", "class" => CrudController::class, "action" => "index", "name" => "crud.index"],
-            ["path" => "/crud/get/{name}", "class" => CrudController::class, "action" => "get", "name" => "crud.get"],
-            ["path" => "/crud/get/{name}/{id}", "class" => CrudController::class, "action" => "get", "name" => "crud.get2"],
-            ["path" => "/crud/save/{name}", "class" => CrudController::class, "action" => "save", "name" => "crud.save", "method" => "POST"],
-            ["path" => "/crud/save/{name}/{id}", "class" => CrudController::class, "action" => "save", "name" => "crud.save2", "method" => "POST"],
-            ["path" => "/crud/delete/{name}/{id}", "class" => CrudController::class, "action" => "delete", "name" => "crud.delete"],
+            ["path" => "/crud/{name}", "class" => CrudController::class, "action" => "index", "name" => "crud.index", "paramClasses" => [$this->providers["crudManager"]]],
+            ["path" => "/crud/get/{name}", "class" => CrudController::class, "action" => "get", "name" => "crud.get", "paramClasses" => [$this->providers["crudManager"]]],
+            ["path" => "/crud/get/{name}/{id}", "class" => CrudController::class, "action" => "get", "name" => "crud.get2", "paramClasses" => [$this->providers["crudManager"]]],
+            ["path" => "/crud/save/{name}", "class" => CrudController::class, "action" => "save", "name" => "crud.save", "method" => "POST", "paramClasses" => [$this->providers["crudManager"]]],
+            ["path" => "/crud/save/{name}/{id}", "class" => CrudController::class, "action" => "save", "name" => "crud.save2", "method" => "POST", "paramClasses" => [$this->providers["crudManager"]]],
+            ["path" => "/crud/delete/{name}/{id}", "class" => CrudController::class, "action" => "delete", "name" => "crud.delete", "paramClasses" => [$this->providers["crudManager"]]],
             ["path" => "/list", "class" => Home::class, "action" => "list", "paramClasses" => [$this->providers["cacheManager"], $this->providers["userManager"]], "name" => "home.index"],
 
 

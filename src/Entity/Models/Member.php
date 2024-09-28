@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-    use Crud;
-
     protected $table = 'members';
 
     public $timestamps = true;

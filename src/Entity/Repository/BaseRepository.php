@@ -2,11 +2,10 @@
 
 namespace App\Entity\Repository;
 
-abstract class BaseRepository
+use App\Business\Database\Doctrine;
+use App\Business\Database\Eloquent;
+
+abstract class BaseRepository extends Eloquent
 {
-    public function __construct()
-    {
-        $orm = config('Settings', 'orm');
-        (new $orm());
-    }
+
 }

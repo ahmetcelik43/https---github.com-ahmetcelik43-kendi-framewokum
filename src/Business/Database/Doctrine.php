@@ -12,4 +12,8 @@ class Doctrine extends Database
     {
        echo 'doctrine';
     }
+    function insertBatch(array $userbatch = array(), $tablename)
+    {
+       echo 'doctrine insert batch';
+    }
 }

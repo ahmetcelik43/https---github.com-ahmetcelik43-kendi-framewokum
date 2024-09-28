@@ -20,4 +20,5 @@ class UserEloquentRepository extends BaseUserRepository
         $data->save();
         return $data;
     }
+
 }

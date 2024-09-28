@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Business\Crud;
+namespace App\Entity\Repository\Eloquent;
 
-use App\Entity\Repository\ParentRepository;
+use App\Entity\Repository\BaseCrudRepository;
 use Illuminate\Database\Eloquent\Model;
 
-trait Crud
-{
-
-    public function getQuery(Model $model)
+class CrudEloquentRepository extends BaseCrudRepository
+{    
+    public function getQuery(Model $model=null)
     {
         // $fillables = $model->getFillable();
         $data = $model::all()->toArray();
@@ -16,7 +15,7 @@ trait Crud
         return $data;
     }
 
-    public function getSingleQuery(Model $model, int $id)
+    public function getSingleQuery(Model $model=null, int $id)
     {
         // $fillables = $model->getFillable();
         $data = $model::find($id);
@@ -24,7 +23,7 @@ trait Crud
         return $data;
     }
 
-    public function saveQuery(Model $model,int $id = null, array $post)
+    public function saveQuery(Model $model=null,int $id = null, array $post)
     {
         if ($id) {
             return $model->find($id)->update($post);
@@ -32,10 +31,11 @@ trait Crud
         return $model::create($post);
     }
 
-    public function deleteQuery(Model $model,int $id = null)
+    public function deleteQuery(Model $model=null,int $id = null)
     {
         if ($id) {
             return $model->find($id)->delete();
         }
     }
+
 }

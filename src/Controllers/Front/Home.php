@@ -36,19 +36,20 @@ class Home extends FrontController
         //var_dump(baseurl("image"));die();
         //print_r($this->orm->init());
         $user = $this->userService->getAll();
-        $cacheValue = viewData("Admin/Dashboard", $user);
-        return finish($cacheValue);
+        return debug($user);
+        
 
 
         //$cacheValue = viewData("Admin/Dashboard", $user);
         //debug($user);
 
-        $post = array(
-            array("permissionid" => 1, "permissionname" => "Super Admin", "permissions" => "permission"),
-            array("permissionid" => 2, "permissionname" => "Admin", "permissions" => "permission"),
-            array("permissionid" => 3, "permissionname" => "Site Manager", "permissions" => "permission")
+        /*$post = array(
+            array( "permissionname" => "Super Admin", "permissions" => "permission"),
+            array("permissionname" => "Admin", "permissions" => "permission"),
+            array("permissionname" => "Site Manager", "permissions" => "permission")
         );
-        //debug($this->userService->insertBatch($post,"permissions"));
+        debug($this->userService->insertBatch($post,"permissions"));
+        */
 
     }
 

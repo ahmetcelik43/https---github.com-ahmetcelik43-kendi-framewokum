@@ -1,8 +1,5 @@
 <?php
 
-use App\Business\Database\Doctrine;
-use App\Business\Database\Eloquent;
-
 $config["base_path"] = "/doc2";
 $config["cacheExpire"] = 300;
 $config["adminSessionName"] = $_SERVER["HTTP_HOST"];
@@ -16,5 +13,4 @@ $config["default_database"] = [
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
 ];
-$config["orm"] =  Eloquent::class;
 

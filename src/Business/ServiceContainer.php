@@ -4,8 +4,10 @@ namespace App\Business;
 
 use App\Business\Cache\FileSystemCache;
 use App\Business\Cache\ICache;
+use App\Entity\Repository\BaseCrudRepository;
 use App\Entity\Repository\BaseUserRepository;
-use App\Entity\Repository\Doctrine\UserDoctrineRepository;
+use App\Entity\Repository\Eloquent\UserRepository;
+use App\Entity\Repository\Eloquent\CrudEloquentRepository;
 use App\Entity\Repository\Eloquent\UserEloquentRepository;
 
 class ServiceContainer
@@ -78,8 +80,17 @@ class ServiceContainer
             return $instance;
         });
 
+        $this->set(BaseCrudRepository::class, function () {
+            static $instance = null;
+            if ($instance === null) {
+                $instance = new CrudEloquentRepository();
+            }
+            return $instance;
+        });
+
         $providers["cacheManager"] = $this->get(ICache::class);
         $providers["userManager"] = $this->get(BaseUserRepository::class);
+        $providers["crudManager"] = $this->get(BaseCrudRepository::class);
         return $providers;
     }
 }
