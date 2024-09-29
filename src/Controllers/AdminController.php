@@ -6,7 +6,7 @@ use App\Business\Middlewares\AdminLoginMiddleware;
 
 class AdminController extends BaseController
 {
-    protected $generalData;
+    protected array $generalData;
     public function __construct()
     {
         //AdminLoginMiddleware::before();

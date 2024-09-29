@@ -23,23 +23,23 @@
         <?php foreach ($data["labelKeys"] as $key) { ?>
             <div class="wrap">
                 <?php if ($data["labels"][$key]["isverify"] === true) { ?>
-                   <div>
-                    <label>Verify</label>
-                    <input onchange="showHide(this);" type="checkbox" class="verify">
-                   </div>
-            <div class="verify-content">
-                <label><?= $data["labels"][$key]["title"] ?></label>
-                <input type="<?= $data["labels"][$key]["type"] ?>" name="data[<?= $key ?>]" value="">
-            </div>
-        <?php } else { ?>
-            <div>
-                <label><?= $data["labels"][$key]["title"] ?></label>
-                <input type="<?= $data["labels"][$key]["type"] ?>" name="data[<?= $key ?>]" value="<?= ($data["data"] ? $data["data"][$key] : "") ?>">
+                    <div>
+                        <label>Verify</label>
+                        <input onchange="showHide(this);" type="checkbox" class="verify">
+                    </div>
+                    <div class="verify-content">
+                        <label><?= $data["labels"][$key]["title"] ?></label>
+                        <input type="<?= $data["labels"][$key]["type"] ?>" name="data[<?= $key ?>]" value="">
+                    </div>
+                <?php } else { ?>
+                    <div>
+                        <label><?= $data["labels"][$key]["title"] ?></label>
+                        <input type="<?= $data["labels"][$key]["type"] ?>" name="data[<?= $key ?>]" value="<?= ($data["data"] ? $data["data"][$key] : "") ?>">
+                    </div>
+                <?php } ?>
             </div>
         <?php } ?>
-        </div>
-    <?php } ?>
-    <button>Save</button>
+        <button>Save</button>
     </form>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

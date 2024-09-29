@@ -173,11 +173,7 @@ function url($ispath = true)
     // Tam URL
     return $protocol . $host . $uri;
 }
-function urlto($name)
-{
-    $router = new Router();
-    return $router->saltRoutes($name);
-}
+
 function baseurl($name, $params = [])
 {
     $router = new Router();
@@ -187,4 +183,28 @@ function baseurl($name, $params = [])
         $url = str_replace('{' . $key . '}', $value, $url);
     }
     return $url;
+}
+
+function partial($layout, $partial, $data = [])
+{
+    require BASEPATH . "/src/Views/$partial.php";
+    $layout = file_get_contents(BASEPATH . "/src/Views/$layout.php");
+    if (!empty($head)) {
+        $layout = str_replace("@section_head", $head, $layout);
+    } else {
+        $layout = str_replace("@section_head", "", $layout);
+    }
+    if (!empty($main)) {
+        $layout = str_replace("@section_main", $main, $layout);
+    } else {
+        $layout = str_replace("@section_main", "", $layout);
+    }
+    if (!empty($js)) {
+        $layout = str_replace("@section_js", $js, $layout);
+    } else {
+        $layout = str_replace("@section_js", "", $layout);
+    }
+    header("content-type:text/html");
+    echo $layout;
+    exit();
 }

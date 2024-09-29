@@ -26,8 +26,7 @@ class CrudController extends AdminController
                 $data["labels"] = ["member_name" => "Member Name", "member_email" => "Member Email", "status" => "Member Status"];
                 $data["labelKeys"] = array_keys($data["labels"]);
                 $data["id_column"] = $model->primaryKey;
-                //debug($data);
-                return view('Admin/Crud/index', $data);
+                partial('Admin/layout','Admin/Crud/index', $data);
                 break;
 
             default:
