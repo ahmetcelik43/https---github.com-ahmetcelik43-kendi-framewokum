@@ -204,7 +204,27 @@ function partial($layout, $partial, $data = [])
     } else {
         $layout = str_replace("@section_js", "", $layout);
     }
+    if (!empty($title)) {
+        $layout = str_replace("@section_title", $title, $layout);
+    } else {
+        $layout = str_replace("@section_title", "", $layout);
+    }
+    if (!empty($css)) {
+        $layout = str_replace("@section_css", $css, $layout);
+    } else {
+        $layout = str_replace("@section_css", "", $layout);
+    }
     header("content-type:text/html");
     echo $layout;
     exit();
+}
+
+function section()
+{
+    ob_start();
+}
+function endsection()
+{
+    $html = ob_get_clean();
+    return $html;
 }

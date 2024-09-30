@@ -1,6 +1,10 @@
-<?php ob_start(); ?>
+<?php section(); ?>
+<?= $data["name"]; ?>
+<?php $title = endsection(); ?>
+
+<?php section(); ?>
 <h1><?= $data["title"] ?></h1>
-<a href="<?= baseurl("crud.get", ["name" => "member"]) ?>">Add</a>
+<a href="<?= baseurl("crud.get", ["name" => $data["name"]]) ?>">Add</a>
 <table>
     <thead>
         <?php foreach ($data["labels"] as $key => $value) {
@@ -24,9 +28,9 @@
     </tbody>
 </table>
 <?php
-$main = ob_get_clean();
+$main = endsection();
 ?>
-<?php ob_start(); ?>
+<?php section(); ?>
 
 <script>
     function showHide(e) {
@@ -34,5 +38,5 @@ $main = ob_get_clean();
     }
 </script>
 <?php
-$js = ob_get_clean();
+$js = endsection();
 ?>

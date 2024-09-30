@@ -4,16 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .verify-content {
-            display: none;
-        }
-
-        .show {
-            display: block !important;
-        }
-    </style>
+    <title>@section_title</title>
+    @section_css
 </head>
 
 <body>
