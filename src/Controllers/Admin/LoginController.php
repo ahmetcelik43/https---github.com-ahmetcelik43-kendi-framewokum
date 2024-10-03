@@ -18,7 +18,8 @@ class LoginController extends BaseController
         session_regenerate_id(true);
         echo 'panel';
     }
-    public function logout() {
+    public function logout()
+    {
         session_destroy();
     }
 }

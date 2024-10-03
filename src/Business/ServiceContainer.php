@@ -64,29 +64,22 @@ class ServiceContainer
     function services()
     {
         // cache continer
-        $this->set(ICache::class, function () {
-            static $instance = null;
-            if ($instance === null) {
-                $instance = new FileSystemCache();
-            }
-            return $instance;
-        });
 
-        $this->set(BaseUserRepository::class, function () {
-            static $instance = null;
-            if ($instance === null) {
-                $instance = new UserEloquentRepository();
-            }
-            return $instance;
-        });
+        $managers = [
+            BaseCrudRepository::class => CrudEloquentRepository::class,
+            BaseUserRepository::class => UserEloquentRepository::class,
+            ICache::class => FileSystemCache::class
+        ];
 
-        $this->set(BaseCrudRepository::class, function () {
-            static $instance = null;
-            if ($instance === null) {
-                $instance = new CrudEloquentRepository();
-            }
-            return $instance;
-        });
+        foreach ($managers as $key => $value) {
+            $this->set($key, function () use ($value) {
+                static $instance = null;
+                if ($instance === null) {
+                    $instance = new $value();
+                }
+                return $instance;
+            });
+        }
 
         $providers["cacheManager"] = $this->get(ICache::class);
         $providers["userManager"] = $this->get(BaseUserRepository::class);
